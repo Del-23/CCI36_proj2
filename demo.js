@@ -1,9 +1,11 @@
 var scene, camera, renderer, mesh;
 var meshFloor;
 
+var crate, crateTexture, crateNormalMap, crateBumpMap;
+
 var keyboard = {};
 var player = {
-    height:1.8,
+    height: 1.8,
     speed: 0.2,
     turnSpeed: Math.PI * 0.01
 };
@@ -20,15 +22,15 @@ function init() {
             wireframe: USE_WIREFRAME
         })
     );
-    mesh.position.y +=1;
+    mesh.position.y += 1;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
     scene.add(mesh);
 
     meshFloor = new THREE.Mesh(
-        new THREE.PlaneGeometry(10,10,10,10),
+        new THREE.PlaneGeometry(20, 20, 10, 10),
         new THREE.MeshPhongMaterial({
-            color:0xffffff,
+            color: 0xffffff,
             wireframe: USE_WIREFRAME
         }
         )
@@ -41,11 +43,26 @@ function init() {
     scene.add(ambientLight);
 
     light = new THREE.PointLight(0xffffff, 0.8, 18);
-    light.position.set(-3,6,-3);
+    light.position.set(-3, 6, -3);
     light.castShadow = true;
     light.shadow.camera.near = 0.1;
     light.shadow.camera.far = 25;
     scene.add(light);
+
+    var textureLoader = new THREE.TextureLoader();
+    crateTexture = textureLoader.load("crate0/crate0_diffuse.png");
+    
+    crate = new THREE.Mesh(
+        new THREE.BoxGeometry(3, 3, 3),
+        new THREE.MeshPhongMaterial({
+            color: 0xffffff,
+            map: crateTexture
+        })
+    );
+    scene.add(crate);
+    crate.position.set(2.5, 3/2, 2.5);
+    crate.receiveShadow = true;
+    crate.castShadow = true;
 
     camera.position.set(0, player.height, -5);
     camera.lookAt(new THREE.Vector3(0, player.height, 0));
@@ -69,27 +86,27 @@ function animate() {
     mesh.rotation.x += 0.01;
     mesh.rotation.y += 0.02;
 
-    if(keyboard[87]){//W key
-        camera.position.x -= Math.sin(camera.rotation.y)*player.speed;
-        camera.position.z -= -Math.cos(camera.rotation.y)*player.speed;
+    if (keyboard[87]) {//W key
+        camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+        camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
 
     }
 
-    if(keyboard[83]){//S key
-        camera.position.x += Math.sin(camera.rotation.y)*player.speed;
-        camera.position.z += -Math.cos(camera.rotation.y)*player.speed;
+    if (keyboard[83]) {//S key
+        camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+        camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
 
     }
 
-    if(keyboard[65]){//A key
-        camera.position.x += Math.sin(camera.rotation.y + Math.PI/2)*player.speed;
-        camera.position.z += -Math.cos(camera.rotation.y + Math.PI/2)*player.speed;
+    if (keyboard[65]) {//A key
+        camera.position.x += Math.sin(camera.rotation.y + Math.PI / 2) * player.speed;
+        camera.position.z += -Math.cos(camera.rotation.y + Math.PI / 2) * player.speed;
 
     }
 
-    if(keyboard[68]){//D key
-        camera.position.x += Math.sin(camera.rotation.y - Math.PI/2)*player.speed;
-        camera.position.z += -Math.cos(camera.rotation.y - Math.PI/2)*player.speed;
+    if (keyboard[68]) {//D key
+        camera.position.x += Math.sin(camera.rotation.y - Math.PI / 2) * player.speed;
+        camera.position.z += -Math.cos(camera.rotation.y - Math.PI / 2) * player.speed;
 
     }
 
