@@ -64,9 +64,22 @@ function init() {
     crate.receiveShadow = true;
     crate.castShadow = true;
 
+    	// Model/material loading!
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.load("models/Tent_Poles_01.mtl", function(materials){
+		
+		materials.preload();
+		var objLoader = new THREE.OBJLoader();
+		objLoader.setMaterials(materials);
+		
+		objLoader.load("models/Tent_Poles_01.obj", function(mesh){
+			scene.add(mesh);
+		});
+		
+	});
+
     camera.position.set(0, player.height, -5);
     camera.lookAt(new THREE.Vector3(0, player.height, 0));
-
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(1280, 720);
